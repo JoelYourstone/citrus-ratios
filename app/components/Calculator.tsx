@@ -41,7 +41,7 @@ export default function Calculator(props: Props) {
   // Focus the input when the page loads
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  }, [props.title]);
 
   const handleInputChange = (value: number) => {
     setCurrentInput(value);
