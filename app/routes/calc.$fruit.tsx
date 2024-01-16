@@ -71,6 +71,7 @@ export default function FruitCalculator() {
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       {config && (
         <Calculator
+          key={config.title}
           title={config.title}
           inputString={config.inputString}
           outputs={config.outputs}
