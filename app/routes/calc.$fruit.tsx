@@ -43,7 +43,7 @@ const calculatorConfigs = {
   },
 };
 
-export function Headers() {
+export function headers() {
   return {
     "Cache-Control": "max-age=10800",
   };
