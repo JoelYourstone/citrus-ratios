@@ -15,7 +15,6 @@ type HistoryEntry = {
 };
 
 export default function Calculator(props: Props) {
-  const [currentInput, setCurrentInput] = useState<number>(0);
   const [outputStates, setOutputStates] = useState<{ [key: string]: number }>(
     {}
   );
@@ -31,7 +30,7 @@ export default function Calculator(props: Props) {
       const recentEntry = parsedHistory[parsedHistory.length - 1];
       if (recentEntry && Date.now() - recentEntry.timestamp < 1800000) {
         // 30 minutes
-        setCurrentInput(recentEntry.input);
+        inputRef.current!.value = String(recentEntry.input);
         calculateOutputs(recentEntry.input);
       }
     }
@@ -43,8 +42,7 @@ export default function Calculator(props: Props) {
     inputRef.current?.focus();
   }, [props.title]);
 
-  const handleInputChange = (value: number) => {
-    setCurrentInput(value);
+  const storeInputHistory = (value: number) => {
     if (inputTimeout) {
       clearTimeout(inputTimeout);
     }
@@ -72,7 +70,7 @@ export default function Calculator(props: Props) {
   };
 
   const handleHistoryItemClick = (input: number) => {
-    setCurrentInput(input);
+    inputRef.current!.value = String(input);
     calculateOutputs(input);
   };
 
@@ -84,10 +82,9 @@ export default function Calculator(props: Props) {
         <input
           type="number"
           ref={inputRef}
-          value={currentInput}
           onChange={(e) => {
             const value = Number(e.target.value);
-            handleInputChange(value);
+            storeInputHistory(value);
             calculateOutputs(value);
           }}
         />
