@@ -18,61 +18,31 @@ export default function Calculator(props: Props) {
   const [outputStates, setOutputStates] = useState<{ [key: string]: number }>(
     {}
   );
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [inputTimeout, setInputTimeout] = useState<NodeJS.Timeout | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const savedHistory = localStorage.getItem(`history_${props.title}`);
-    if (savedHistory) {
-      const parsedHistory = JSON.parse(savedHistory) as HistoryEntry[];
-      setHistory(parsedHistory);
-      const recentEntry = parsedHistory[parsedHistory.length - 1];
-      if (recentEntry && Date.now() - recentEntry.timestamp < 1800000) {
-        // 30 minutes
-        inputRef.current!.value = String(recentEntry.input);
-        calculateOutputs(recentEntry.input);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.title]);
+  const { storeInputHistory, history } = useHistory(
+    inputRef,
+    props.title,
+    (input) => calculateOutputs(input)
+  );
 
   // Focus the input when the page loads
   useEffect(() => {
     inputRef.current?.focus();
   }, [props.title]);
 
-  const storeInputHistory = (value: number) => {
-    if (inputTimeout) {
-      clearTimeout(inputTimeout);
-    }
-    setInputTimeout(setTimeout(() => storeInputInHistory(value), 5000));
-  };
-
-  const storeInputInHistory = (value: number) => {
-    if (value === 0) return;
-    const newEntry = { input: value, timestamp: Date.now() };
-    const updatedHistory = [...history, newEntry];
-    setHistory(updatedHistory);
-    localStorage.setItem(
-      `history_${props.title}`,
-      JSON.stringify(updatedHistory)
-    );
-  };
-
-  const calculateOutputs = (inputValue: number) => {
+  function calculateOutputs(inputValue: number) {
     const newOutputStates: { [key: string]: number } = {};
     props.outputs.forEach((output) => {
       newOutputStates[output.name] =
         Math.round(inputValue * output.conversionFactor * 100) / 100;
     });
     setOutputStates(newOutputStates);
-  };
+  }
 
-  const handleHistoryItemClick = (input: number) => {
+  function handleHistoryItemClick(input: number) {
     inputRef.current!.value = String(input);
     calculateOutputs(input);
-  };
+  }
 
   return (
     <div>
@@ -108,4 +78,49 @@ export default function Calculator(props: Props) {
       ))}
     </div>
   );
+}
+
+function useHistory(
+  inputRef: React.RefObject<HTMLInputElement>,
+  title: string,
+  calcOutputs: (inputValue: number) => void
+) {
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [inputTimeout, setInputTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  // Load history and prefill the input if the last entry was less than 30 minutes ago
+  useEffect(() => {
+    const savedHistory = localStorage.getItem(`history_${title}`);
+    if (savedHistory) {
+      const parsedHistory = JSON.parse(savedHistory) as HistoryEntry[];
+      setHistory(parsedHistory);
+      const recentEntry = parsedHistory[parsedHistory.length - 1];
+      if (recentEntry && Date.now() - recentEntry.timestamp < 1800000) {
+        // 30 minutes
+        inputRef.current!.value = String(recentEntry.input);
+        calcOutputs(recentEntry.input);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title]);
+
+  function storeInputHistory(value: number) {
+    if (inputTimeout) {
+      clearTimeout(inputTimeout);
+    }
+    setInputTimeout(setTimeout(() => storeInputInHistory(value), 5000));
+  }
+
+  function storeInputInHistory(value: number) {
+    if (value === 0) return;
+    const newEntry = { input: value, timestamp: Date.now() };
+    const updatedHistory = [...history, newEntry];
+    setHistory(updatedHistory);
+    localStorage.setItem(`history_${title}`, JSON.stringify(updatedHistory));
+  }
+
+  return {
+    storeInputHistory,
+    history,
+  };
 }
