@@ -8,6 +8,12 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export function Headers() {
+  return {
+    "Cache-Control": "max-age=10800",
+  };
+}
+
 export default function Calc() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>

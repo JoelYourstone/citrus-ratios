@@ -43,6 +43,12 @@ const calculatorConfigs = {
   },
 };
 
+export function Headers() {
+  return {
+    "Cache-Control": "max-age=10800",
+  };
+}
+
 export const loader: LoaderFunction = ({ params }) => {
   if (!params.fruit) {
     return new Response("Not found", { status: 404 });
