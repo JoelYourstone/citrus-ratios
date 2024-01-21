@@ -8,6 +8,13 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+// Cache for 24h
+export function headers() {
+  return {
+    "Cache-Control": "max-age=86400",
+  };
+}
+
 export default function Index() {
   return <Calc />;
 }
