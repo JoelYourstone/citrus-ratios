@@ -26,6 +26,7 @@ export function useHistory(
   }, [title]);
 
   function storeInputHistory(value: number) {
+    if (value <= 0 || isNaN(value)) return;
     if (inputTimeout) {
       clearTimeout(inputTimeout);
     }
