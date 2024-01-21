@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
-import { useLoaderData, useParams } from "@remix-run/react";
+import { json, useLoaderData, useParams } from "@remix-run/react";
 import Calculator from "~/components/Calculator";
 
 // Define calculator configurations for each fruit
@@ -62,7 +62,9 @@ export const loader: LoaderFunction = ({ params }) => {
   }
 
   // Get the fruit name from the URL and return its calculator configuration
-  return calculatorConfigs[fruit];
+  return json(calculatorConfigs[fruit], {
+    headers: { "Cache-Control": "max-age=10800" },
+  });
 };
 
 export default function FruitCalculator() {
