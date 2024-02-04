@@ -19,7 +19,7 @@ export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export default function Calc() {
   return (
-    <div>
+    <div style={{ maxWidth: "400px", margin: "auto" }}>
       <div className="linkTabs">
         <Link className="linkLime linkLink" to="/calc/lime">
           Lime Calculator
