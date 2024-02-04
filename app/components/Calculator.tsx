@@ -64,7 +64,7 @@ export default function Calculator(props: Props) {
           id="Layer_1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 501.551 501.551"
-          opacity={0.5}
+          opacity={0.2}
         >
           <g>
             <path
