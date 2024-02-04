@@ -1,0 +1,33 @@
+.linkLime {
+  background-color: #c1ecc1;
+}
+
+.linkLemon {
+  background-color: #f8e26a;
+}
+
+.linkGrape {
+  background-color: pink;
+}
+
+.linkOrange {
+  background-color: #ffb158;
+}
+
+.linkLink {
+  text-decoration: none;
+  padding: 5px;
+  border-radius: 5px 5px 0 0px;
+  font-family: sans-serif;
+}
+
+.linkLink:visited {
+  color: black;
+}
+
+.linkTabs {
+  display: flex;
+  flex-direction: row;
+  gap: 0.3rem;
+  padding: 1rem 0.5rem 0 0.5rem;
+}

@@ -1,6 +1,6 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import { Link, Outlet } from "@remix-run/react";
-// import styles from "./calc.css";
+import styles from "../styles/calc.css";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,18 +15,24 @@ export function headers() {
   };
 }
 
-// export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export default function Calc() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Link className="styletest" to="/calc/lime">
+    <div>
+      <div className="linkTabs">
+        <Link className="linkLime linkLink" to="/calc/lime">
           Lime Calculator
         </Link>
-        <Link to="/calc/lemon">Lemon Calculator</Link>
-        <Link to="/calc/orange">Orange Calculator</Link>
-        <Link to="/calc/grape">Grape Calculator</Link>
+        <Link className="linkLemon linkLink" to="/calc/lemon">
+          Lemon Calculator
+        </Link>
+        <Link className="linkOrange linkLink" to="/calc/orange">
+          Orange Calculator
+        </Link>
+        <Link className="linkGrape linkLink" to="/calc/grape">
+          Grapefruit Calculator
+        </Link>
       </div>
       <Outlet /> {/* This will render the matched child route */}
     </div>

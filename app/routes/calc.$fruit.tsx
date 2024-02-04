@@ -13,7 +13,7 @@ const calculatorConfigs = {
       { name: "Citric Acid", conversionFactor: 1 },
       { name: "Water", conversionFactor: 16.66666666 },
     ],
-    color: "#ffffb1",
+    color: "#f8e26a",
   },
   lime: {
     title: "Lime",
@@ -23,7 +23,7 @@ const calculatorConfigs = {
       { name: "Malic Acid", conversionFactor: 0.3333 },
       { name: "Water", conversionFactor: 16.66666666 },
     ],
-    color: "#d7ffd7",
+    color: "#c1ecc1",
   },
   orange: {
     title: "Orange",
@@ -33,7 +33,7 @@ const calculatorConfigs = {
       { name: "Malic Acid", conversionFactor: 0.1 },
       { name: "Water", conversionFactor: 16.66666666 },
     ],
-    color: "#fddb9d",
+    color: "#ffb158",
   },
 
   grape: {
