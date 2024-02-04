@@ -200,7 +200,7 @@ function HeaderWithToggle(props: { color: string; title: string }) {
   return (
     <div className="calcHeader" style={{ background: props.color }}>
       <h1>{props.title}</h1>
-      <div className="aciditySection">
+      <div className="aciditySection" style={{ display: "none" }}>
         <span>Acidity</span>
         <section>
           <input className="acidityInput" type="checkbox" id="switch" />
