@@ -2,7 +2,6 @@ import type { LinksFunction } from "@remix-run/cloudflare";
 import { useState, useEffect, useRef } from "react";
 import { useHistory } from "~/hooks/useHistory";
 import styles from "./calculator.css";
-import svg from "../svg/lemon-svgrepo-com.svg";
 
 type Props = {
   title: string;
@@ -65,6 +64,7 @@ export default function Calculator(props: Props) {
           id="Layer_1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 501.551 501.551"
+          opacity={0.5}
         >
           <g>
             <path
