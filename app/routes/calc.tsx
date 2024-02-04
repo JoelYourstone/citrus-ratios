@@ -1,5 +1,6 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import { Link, Outlet } from "@remix-run/react";
+// import styles from "./calc.css";
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,11 +15,15 @@ export function headers() {
   };
 }
 
+// export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+
 export default function Calc() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+    <div style={{ fontFamily: "system-ui, sans-serif" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Link to="/calc/lime">Lime Calculator</Link>
+        <Link className="styletest" to="/calc/lime">
+          Lime Calculator
+        </Link>
         <Link to="/calc/lemon">Lemon Calculator</Link>
         <Link to="/calc/orange">Orange Calculator</Link>
         <Link to="/calc/grape">Grape Calculator</Link>

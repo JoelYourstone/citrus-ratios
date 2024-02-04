@@ -1,5 +1,7 @@
+import type { LinksFunction } from "@remix-run/cloudflare";
 import { useState, useEffect, useRef } from "react";
 import { useHistory } from "~/hooks/useHistory";
+import styles from "./calculator.css";
 
 type Props = {
   title: string;
@@ -8,12 +10,15 @@ type Props = {
     name: string;
     conversionFactor: number;
   }[];
+  color: string;
 };
 
 export type HistoryEntry = {
   input: number;
   timestamp: number;
 };
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export default function Calculator(props: Props) {
   const [outputStates, setOutputStates] = useState<{ [key: string]: number }>(
@@ -48,52 +53,73 @@ export default function Calculator(props: Props) {
   const reversedHistory = [...history].reverse().slice(0, 5);
 
   return (
-    <div>
-      <h1>{props.title}</h1>
+    <div className="calculator">
+      <section className="headerWithToggle">
+        <HeaderWithToggle color={props.color} title={props.title} />
+      </section>
+      <div className="calcContainer">
+        <p className="calcInputContainer">
+          {props.inputString}{" "}
+          <div>
+            <input
+              className="calcInput"
+              type="number"
+              ref={inputRef}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                storeInputHistory(value);
+                calculateOutputs(value);
+              }}
+            />
+            <span className="calcUnit">g</span>
+          </div>
+        </p>
 
-      <p>
-        {props.inputString}{" "}
-        <input
-          type="number"
-          ref={inputRef}
-          onChange={(e) => {
-            const value = Number(e.target.value);
-            storeInputHistory(value);
-            calculateOutputs(value);
-          }}
-        />
-      </p>
-
-      <ul>
-        {props.outputs.map((output) => (
-          <li key={output.name}>
-            {output.name}: {outputStates[output.name]}g
-          </li>
+        <ul className="calcUl">
+          {props.outputs.map((output) => (
+            <li key={output.name} className="calcUlLi">
+              <span className="calcUlName">{output.name}:</span>
+              <section className="calcUlAmountSection">
+                <span className="calcUlNumber">
+                  {outputStates[output.name]}
+                </span>
+                <span className="calcUlUnit">g</span>
+              </section>
+            </li>
+          ))}
+        </ul>
+        {/* <p>
+          Acidity
+          <br />
+          <label htmlFor="sixpercent">6%</label>
+          <input id="sixpercent" type="radio" name="acidity" />
+          <label htmlFor="fivepercent">5%</label>
+          <input id="fivepercent" type="radio" name="acidity" />
+        </p> */}
+        {Boolean(history.length) && (
+          <h2 className="calcPrevH2">Previous measurements</h2>
+        )}
+        {reversedHistory.map((entry, index) => (
+          <div className="calcPrevButtons" key={index + entry.input}>
+            <button
+              className="calcPrevButton"
+              type="button"
+              key={index}
+              onClick={() => handleHistoryItemClick(entry.input)}
+            >
+              {entry.input} <span>g,</span>{" "}
+              {toRelativeTime(new Date(entry.timestamp))}
+            </button>
+            <button
+              className="calcPrevDelButton"
+              type="button"
+              onClick={() => deleteEntry(entry.timestamp)}
+            >
+              Delete
+            </button>
+          </div>
         ))}
-      </ul>
-      <p>
-        Acidity
-        <br />
-        <label htmlFor="sixpercent">6%</label>
-        <input id="sixpercent" type="radio" name="acidity" />
-        <label htmlFor="fivepercent">5%</label>
-        <input id="fivepercent" type="radio" name="acidity" />
-      </p>
-      {Boolean(history.length) && <h2>Previous measurements</h2>}
-      {reversedHistory.map((entry, index) => (
-        <div key={index + entry.input}>
-          <button
-            type="button"
-            key={index}
-            onClick={() => handleHistoryItemClick(entry.input)}
-          >
-            {entry.input}g, {toRelativeTime(new Date(entry.timestamp))}
-          </button>
-          <button type="button" onClick={() => deleteEntry(entry.timestamp)}>
-            Delete
-          </button>
-        </div>
-      ))}
+      </div>
     </div>
   );
 }
@@ -118,4 +144,25 @@ function toRelativeTime(date: Date) {
     return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
   }
   return "just now";
+}
+
+function HeaderWithToggle(props: { color: string; title: string }) {
+  return (
+    <div className="calcHeader" style={{ background: props.color }}>
+      <h1>{props.title}</h1>
+      <div className="aciditySection">
+        <span>Acidity</span>
+        <section>
+          <input className="acidityInput" type="checkbox" id="switch" />
+          <label className="acidityLabel" htmlFor="switch">
+            Toggle
+          </label>
+          <div style={{ position: "relative" }}>
+            <p>6%</p>
+            <p>5%</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
 }
