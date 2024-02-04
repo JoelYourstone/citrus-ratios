@@ -50,6 +50,7 @@ export default function Calculator(props: Props) {
   return (
     <div>
       <h1>{props.title}</h1>
+
       <p>
         {props.inputString}{" "}
         <input
@@ -62,6 +63,7 @@ export default function Calculator(props: Props) {
           }}
         />
       </p>
+
       <ul>
         {props.outputs.map((output) => (
           <li key={output.name}>
@@ -69,6 +71,14 @@ export default function Calculator(props: Props) {
           </li>
         ))}
       </ul>
+      <p>
+        Acidity
+        <br />
+        <label htmlFor="sixpercent">6%</label>
+        <input id="sixpercent" type="radio" name="acidity" />
+        <label htmlFor="fivepercent">5%</label>
+        <input id="fivepercent" type="radio" name="acidity" />
+      </p>
       {Boolean(history.length) && <h2>Previous measurements</h2>}
       {reversedHistory.map((entry, index) => (
         <div key={index + entry.input}>
